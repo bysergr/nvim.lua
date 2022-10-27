@@ -20,12 +20,12 @@ vim.opt.scrolloff = 8
 vim.opt.sidescrolloff = 8
 vim.opt.smartindent = true
 vim.opt.hlsearch = true
-vim.opt.ignorecase = true 
+vim.opt.ignorecase = true
 vim.opt.inccommand = 'split'
 vim.opt.smarttab = true
 vim.opt.wrap = false
 vim.opt.breakindent = true
-vim.opt.spell = true 
+vim.opt.spell = true
 vim.opt.spelllang = "en"
 vim.opt.path:append { '**' }
 vim.opt.wildignore:append { '*/node_modules/*' }
