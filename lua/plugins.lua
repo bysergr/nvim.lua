@@ -7,6 +7,7 @@ end
 vim.cmd([[packadd packer.nvim]])
 
 packer.startup(function(use)
+	use("bluz71/vim-nightfly-guicolors")
 	use("nvim-lualine/lualine.nvim")
 	use("wbthomason/packer.nvim")
 	use("sainnhe/sonokai")
