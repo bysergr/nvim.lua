@@ -1,1 +1,2 @@
-require('git').setup()
+require("git").setup()
+require("gitsigns").setup()

@@ -50,10 +50,10 @@ telescope.setup({
 
 telescope.load_extension("file_browser")
 
-vim.keymap.set("n", ";F", function()
+vim.keymap.set("n", ";f", function()
 	builtin.find_files(themes.get_dropdown())
 end)
-vim.keymap.set("n", ";r", function()
+vim.keymap.set("n", ";b", function()
 	builtin.live_grep(themes.get_dropdown())
 end)
 vim.keymap.set("n", ";b", function()

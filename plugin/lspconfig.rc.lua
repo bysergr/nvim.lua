@@ -1,3 +1,4 @@
+local util = require("lspconfig/util")
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
@@ -5,7 +6,7 @@ vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
-
+vim.lsp.set_log_level("debug")
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(_client, bufnr)
@@ -42,11 +43,8 @@ require("lspconfig").tailwindcss.setup({
 		return vim.loop.cwd()
 	end,
 })
-
-require("lspconfig")["pyright"].setup({
-	on_attach = on_attach,
-	flags = lsp_flags,
-})
+require("lspconfig").dartls.setup({})
+require("lspconfig").jedi_language_server.setup({})
 require("lspconfig")["tsserver"].setup({
 	on_attach = on_attach,
 	flags = lsp_flags,
@@ -66,6 +64,7 @@ require("lspconfig").cssls.setup({
 require("lspconfig").gopls.setup({})
 require("lspconfig").emmet_ls.setup({})
 require("lspconfig").sqlls.setup({})
+require("lspconfig").dockerls.setup({})
 
 require("lspconfig").sumneko_lua.setup({
 	settings = {

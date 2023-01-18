@@ -1,8 +1,8 @@
-local status, autopairs = pcall(require, 'nvim-autopairs')
-if (not status) then
-  return
+local status, autopairs = pcall(require, "nvim-autopairs")
+if not status then
+	return
 end
 
-autopairs.setup {
-  disable_filetype = { 'TelescopePromt', 'vim' }
-}
+autopairs.setup({
+	disable_filetype = { "TelescopePromt", "vim" },
+})

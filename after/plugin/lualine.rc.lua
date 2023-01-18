@@ -6,12 +6,14 @@ end
 lualine.setup({
 	options = {
 		icons_enabled = true,
-		-- theme= 'ayu',
-		theme = "nightfly",
-		-- theme = 'tokyonight',
-		-- theme = 'sonokai',
+
+		-- theme = "nightfly",
+		theme = "auto",
+
 		section_separators = { left = "", right = "" },
 		component_separators = { left = "", right = "" },
+		globalstatus = false,
+		always_divide_middle = true,
 		disabled_filetypes = {},
 	},
 	sections = {
@@ -21,7 +23,7 @@ lualine.setup({
 			{
 				"filename",
 				file_status = true, -- displays file status (readonly status, modified status)
-				path = 0, -- 0 = just filename, 1 = relative path, 2 = absolute path
+				path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
 			},
 		},
 		lualine_x = {
@@ -51,5 +53,4 @@ lualine.setup({
 		lualine_z = {},
 	},
 	tabline = {},
-	extensions = { "fugitive" },
 })
