@@ -3,6 +3,6 @@
 - Themes: kanagawa and nightfly  
 - Support LSP
 - Support GIT
-- Formater 
+- Formatter 
 - Telescope
 
