@@ -3,5 +3,5 @@
 - Themes: kanagawa, nightfly, ayu and catppuccin
 - Support LSP
 - Support GIT
-- Formater 
+- Formatter 
 - Telescope
