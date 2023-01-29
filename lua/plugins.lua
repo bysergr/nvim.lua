@@ -7,8 +7,19 @@ end
 vim.cmd([[packadd packer.nvim]])
 
 packer.startup(function(use)
+	use("wbthomason/packer.nvim")
+
+	-- Themes
+	use("rebelot/kanagawa.nvim")
+	use("bluz71/vim-nightfly-guicolors")
+	use({ "catppuccin/nvim", as = "catppuccin" })
+	use("ayu-theme/ayu-vim")
+
+	-- Git
 	use("dinhhuy258/git.nvim")
 	use("lewis6991/gitsigns.nvim")
+
+	-- Markdown
 	use({
 		"iamcco/markdown-preview.nvim",
 		run = "cd app && npm install",
@@ -17,29 +28,12 @@ packer.startup(function(use)
 		end,
 		ft = { "markdown" },
 	})
-	use("bluz71/vim-nightfly-guicolors")
-	use("rebelot/kanagawa.nvim")
+
+	-- UI
 	use("nvim-lualine/lualine.nvim")
-	use("wbthomason/packer.nvim")
+	use("norcalli/nvim-colorizer.lua")
 	use("lukas-reineke/indent-blankline.nvim")
-	use({ "L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*" }) --Snippet
-	use("rafamadriz/friendly-snippets")
-	use("saadparwaiz1/cmp_luasnip")
-	use("onsails/lspkind-nvim") -- vscode-like pictograms
-	use("hrsh7th/cmp-buffer") -- nvim-cmp source for buffer words
-	use("hrsh7th/cmp-nvim-lsp") -- nvim-cmp source for neovim's built-in LSP
-	use("hrsh7th/nvim-cmp") -- Completion
-	use({
-		"numToStr/Comment.nvim",
-	})
-	use("JoosepAlviste/nvim-ts-context-commentstring")
-	use({
-		"williamboman/mason.nvim",
-		"williamboman/mason-lspconfig.nvim",
-		"neovim/nvim-lspconfig",
-		"jayp0521/mason-null-ls.nvim",
-	})
-	use("jose-elias-alvarez/null-ls.nvim")
+	use("kyazdani42/nvim-web-devicons")
 	use({
 		"nvim-treesitter/nvim-treesitter",
 		run = function()
@@ -47,20 +41,36 @@ packer.startup(function(use)
 		end,
 	})
 
-	use({
-		"windwp/nvim-autopairs",
-		config = function()
-			require("nvim-autopairs").setup({})
-		end,
-	})
+	-- UTILS
+	use("windwp/nvim-autopairs")
 	use("windwp/nvim-ts-autotag")
-	use("kyazdani42/nvim-web-devicons") -- File icons
+	use("rhysd/vim-grammarous")
+	use("numToStr/Comment.nvim")
+	use("JoosepAlviste/nvim-ts-context-commentstring")
+
+	-- Telecope
+	use({ "nvim-telescope/telescope-file-browser.nvim" })
 	use({
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.0",
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
-	use({ "nvim-telescope/telescope-file-browser.nvim" })
-	use("norcalli/nvim-colorizer.lua")
-	use("glepnir/lspsaga.nvim") -- LSP UIs
+
+	-- LSP
+	use("williamboman/mason.nvim")
+	use("williamboman/mason-lspconfig.nvim")
+	use("neovim/nvim-lspconfig")
+	use("jayp0521/mason-null-ls.nvim")
+	use("jose-elias-alvarez/null-ls.nvim")
+
+	use("onsails/lspkind-nvim")
+	use("glepnir/lspsaga.nvim")
+
+	-- CMP
+	use("hrsh7th/nvim-cmp")
+	use("hrsh7th/cmp-buffer")
+	use("hrsh7th/cmp-nvim-lsp")
+	use("saadparwaiz1/cmp_luasnip")
+	use({ "L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*" })
+	use("rafamadriz/friendly-snippets")
 end)
