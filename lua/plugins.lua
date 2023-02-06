@@ -44,7 +44,6 @@ packer.startup(function(use)
 	-- UTILS
 	use("windwp/nvim-autopairs")
 	use("windwp/nvim-ts-autotag")
-	use("rhysd/vim-grammarous")
 	use("numToStr/Comment.nvim")
 	use("JoosepAlviste/nvim-ts-context-commentstring")
 

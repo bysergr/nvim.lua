@@ -1,7 +1,7 @@
 local keymap = vim.keymap
 
 -- Delete Word from the front
--- keymap.set("n", "x", '"_x')
+keymap.set("n", "x", '"_x')
 
 -- Visual Block
 keymap.set("n", "bv", "<C-v>")

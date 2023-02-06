@@ -1,21 +1,43 @@
+require("mason").setup()
+require("mason-lspconfig").setup({
+	ensure_installed = {
+		"tsserver",
+		"tailwindcss",
+		"jedi_language_server",
+		"rust_analyzer",
+		"astro",
+		"gopls",
+		"cssls",
+		"emmet_ls",
+  },
+  automatic_installation = { exclude = { "clangd" } }
+})
+
+require("mason-null-ls").setup({
+	ensure_installed = {
+		"prettierd",
+		"prettier",
+		"rustfmt",
+		"gofumpt",
+
+		"eslint_d",
+	},
+	automatic_installation = true,
+})
+
 local util = require("lspconfig/util")
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
+
 local opts = { noremap = true, silent = true }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 vim.lsp.set_log_level("debug")
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(_client, bufnr)
-	-- Enable completion triggered by <c-x><c-o>
-	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
-	-- Mappings.
-	-- See `:help vim.lsp.*` for documentation on any of the below functions
+local on_attach = function(_client, bufnr)
+	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 	local bufopts = { noremap = true, silent = true, buffer = bufnr }
+
 	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
 	vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
 	vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
@@ -23,9 +45,11 @@ local on_attach = function(_client, bufnr)
 	vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
 	vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, bufopts)
 	vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
+
 	vim.keymap.set("n", "<space>wl", function()
 		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 	end, bufopts)
+
 	vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, bufopts)
 	vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
 	vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
@@ -33,59 +57,63 @@ local on_attach = function(_client, bufnr)
 	vim.keymap.set("n", "<space>f", vim.lsp.buf.formatting, bufopts)
 end
 
-local lsp_flags = {
-	-- This is the default in Nvim 0.7+
-	debounce_text_changes = 150,
-}
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
 require("lspconfig").tailwindcss.setup({
-	flags = lsp_flags,
+	on_attach = on_attach,
+	capabilities = capabilities,
 	root_dir = function(_)
 		return vim.loop.cwd()
 	end,
 })
-require("lspconfig").dartls.setup({})
-require("lspconfig").jedi_language_server.setup({})
-require("lspconfig")["tsserver"].setup({
-	on_attach = on_attach,
-	flags = lsp_flags,
-})
-require("lspconfig")["rust_analyzer"].setup({
-	on_attach = on_attach,
-	flags = lsp_flags,
-})
 
-require("lspconfig").astro.setup({})
---Enable (broadcasting) snippet capability for completion
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-require("lspconfig").cssls.setup({
+require("lspconfig").jedi_language_server.setup({
+	on_attach = on_attach,
 	capabilities = capabilities,
 })
-require("lspconfig").gopls.setup({})
-require("lspconfig").emmet_ls.setup({})
-require("lspconfig").sqlls.setup({})
-require("lspconfig").dockerls.setup({})
 
-require("lspconfig").sumneko_lua.setup({
+require("lspconfig")["tsserver"].setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+})
+
+require("lspconfig")["rust_analyzer"].setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+})
+
+require("lspconfig").astro.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+})
+
+require("lspconfig").cssls.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+})
+
+require("lspconfig").gopls.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
 	settings = {
-		Lua = {
-			runtime = {
-				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-				version = "LuaJIT",
-			},
-			diagnostics = {
-				-- Get the language server to recognize the `vim` global
-				globals = { "vim" },
-			},
-			workspace = {
-				-- Make the server aware of Neovim runtime files
-				library = vim.api.nvim_get_runtime_file("", true),
-				checkThirdParty = false,
-			},
-			-- Do not send telemetry data containing a randomized but unique identifier
-			telemetry = {
-				enable = false,
-			},
+		gopls = {
+			gofumpt = true,
 		},
 	},
+	flags = {
+		debounce_text_changes = 150,
+	},
+})
+
+local clangd_capabilities = capabilities
+clangd_capabilities.textDocument.semanticHighlighting = true
+clangd_capabilities.offsetEncoding = "utf-8"
+require("lspconfig").clangd.setup({
+	on_attach = on_attach,
+	capabilities = clangd_capabilities,
+})
+
+require("lspconfig").emmet_ls.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
 })
