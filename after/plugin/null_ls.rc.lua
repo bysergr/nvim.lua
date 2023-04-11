@@ -2,20 +2,23 @@ local null_ls = require("null-ls")
 
 -- for conciseness
 local formatting = null_ls.builtins.formatting
-local code_actions = null_ls.builtins.code_actions
+local diagnostics = null_ls.builtins.diagnostics
 
 -- to setup format on save
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 local sources = {
 	formatting.prettierd,
-	formatting.prettier,
+	formatting.eslint_d,
 	formatting.rustfmt,
 	formatting.gofumpt,
 	formatting.clang_format,
+	formatting.black,
 
-	--[[ code actions ]]
-	code_actions.eslint_d,
+  diagnostics.eslint_d.with({
+    diagnostics_format = '[eslint] #{m}\n(#{c})'
+  })
+
 }
 
 local lsp_formatting = function(bufnr)

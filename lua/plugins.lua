@@ -19,6 +19,9 @@ packer.startup(function(use)
 	use("dinhhuy258/git.nvim")
 	use("lewis6991/gitsigns.nvim")
 
+  --- Github Copilot
+	use("github/copilot.vim")
+ 
 	-- Markdown
 	use({
 		"iamcco/markdown-preview.nvim",
@@ -46,6 +49,9 @@ packer.startup(function(use)
 	use("windwp/nvim-ts-autotag")
 	use("numToStr/Comment.nvim")
 	use("JoosepAlviste/nvim-ts-context-commentstring")
+
+  -- Flutter
+  use {'akinsho/flutter-tools.nvim', requires = 'nvim-lua/plenary.nvim'}
 
 	-- Telecope
 	use({ "nvim-telescope/telescope-file-browser.nvim" })

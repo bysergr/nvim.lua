@@ -4,6 +4,7 @@ require("kanagawa").setup({
 	keywordStyle = { italic = false },
 	statementStyle = { bold = true },
 	variablebuiltinStyle = { italic = false },
+  transparent = false,
 })
 
 require("catppuccin").setup({
@@ -16,7 +17,7 @@ vim.g.nightflyTransparent = true
 vim.g.nightflyItalics = false
 
 -- setup must be called before loading
--- vim.cmd("colorscheme kanagawa")
+vim.cmd("colorscheme kanagawa")
 -- vim.cmd("colorscheme ayu")
 -- vim.cmd([[colorscheme nightfly]])
-vim.cmd([[colorscheme catppuccin]])
+-- vim.cmd([[colorscheme catppuccin]])
