@@ -11,9 +11,7 @@ packer.startup(function(use)
 
 	-- Themes
 	use("rebelot/kanagawa.nvim")
-	use("bluz71/vim-nightfly-guicolors")
 	use({ "catppuccin/nvim", as = "catppuccin" })
-	use("ayu-theme/ayu-vim")
 
 	-- Git
 	use("dinhhuy258/git.nvim")
@@ -49,9 +47,6 @@ packer.startup(function(use)
 	use("windwp/nvim-ts-autotag")
 	use("numToStr/Comment.nvim")
 	use("JoosepAlviste/nvim-ts-context-commentstring")
-
-  -- Flutter
-  use {'akinsho/flutter-tools.nvim', requires = 'nvim-lua/plenary.nvim'}
 
 	-- Telecope
 	use({ "nvim-telescope/telescope-file-browser.nvim" })
