@@ -10,6 +10,9 @@ saga.setup({
 	--the range of 0 for fully opaque window (disabled) to 100 for fully
 	--transparent background. Values between 0-30 are typically most useful.
 	saga_winblend = 10,
+  lightbulb = {
+    virtual_text = false,
+  },
   beacon = {
     enable = false,
   },
