@@ -14,6 +14,6 @@ require("catppuccin").setup({
 })
 
 -- setup must be called before loading
--- vim.cmd("colorscheme kanagawa")
--- vim.cmd([[colorscheme nightfly]])
-vim.cmd([[colorscheme catppuccin]])
+vim.cmd("colorscheme kanagawa")
+-- vim.cmd([[colorscheme catppuccin]])
+-- vim.cmd("colorscheme everblush")

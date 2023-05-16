@@ -12,6 +12,7 @@ packer.startup(function(use)
 	-- Themes
 	use("rebelot/kanagawa.nvim")
 	use({ "catppuccin/nvim", as = "catppuccin" })
+  use({ 'Everblush/nvim', as = 'everblush' })
 
 	-- Git
 	use("dinhhuy258/git.nvim")
