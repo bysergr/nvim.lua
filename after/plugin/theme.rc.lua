@@ -5,6 +5,15 @@ require("kanagawa").setup({
 	statementStyle = { bold =  false},
 	variablebuiltinStyle = { italic = false },
   transparent = true,
+  colors = {
+    theme = {
+      all = {
+        ui = {
+          bg_gutter = "none"
+        }
+      }
+    }
+  }
 })
 
 require("catppuccin").setup({
