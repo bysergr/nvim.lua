@@ -8,17 +8,16 @@ require("mason-lspconfig").setup({
 		"rust_analyzer",
 		"astro",
 		"cssls",
-		"emmet_ls",
-    "svelte-language-server",
-  },
-  automatic_installation = { exclude = { "clangd" } }
+		"svelte-language-server",
+		"lua-language-server",
+	},
+	automatic_installation = { exclude = { "clangd" } },
 })
 
 require("mason-null-ls").setup({
 	ensure_installed = {
 		"prettierd",
 		"prettier",
-		"rustfmt",
 		"gofumpt",
 
 		"eslint_d",
@@ -26,14 +25,15 @@ require("mason-null-ls").setup({
 	automatic_installation = true,
 })
 
-local on_attach = function(_client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+local on_attach = function(_, bufnr)
+	local function buf_set_keymap(...)
+		vim.api.nvim_buf_set_keymap(bufnr, ...)
+	end
 
-  local opts = { noremap = true, silent = true }
+	local opts = { noremap = true, silent = true }
 
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-
+	buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+	buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
 end
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -48,10 +48,23 @@ lspconfig.tailwindcss.setup({
 	end,
 })
 
-lspconfig.elixirls.setup{
+lspconfig.lua_ls.setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+	settings = {
+		Lua = {
+			diagnostics = {
+				-- Get the language server to recognize the `vim` global
+				globals = { "vim" },
+			},
+		},
+	},
+})
+
+lspconfig.elixirls.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
-}
+})
 
 lspconfig.pyright.setup({
 	on_attach = on_attach,
@@ -96,18 +109,18 @@ lspconfig.gopls.setup({
 	},
 })
 
-lspconfig.golangci_lint_ls.setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
-  settings = {
-    gopls = {
-      gofumpt = true,
-    },
-  },
-  flags = {
-    debounce_text_changes = 150,
-  },
-}
+lspconfig.golangci_lint_ls.setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+	settings = {
+		gopls = {
+			gofumpt = true,
+		},
+	},
+	flags = {
+		debounce_text_changes = 150,
+	},
+})
 
 local clangd_capabilities = capabilities
 clangd_capabilities.textDocument.semanticHighlighting = true
@@ -115,9 +128,4 @@ clangd_capabilities.offsetEncoding = "utf-8"
 lspconfig.clangd.setup({
 	on_attach = on_attach,
 	capabilities = clangd_capabilities,
-})
-
-lspconfig.emmet_ls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
 })

@@ -12,15 +12,17 @@ packer.startup(function(use)
 	-- Themes
 	use("rebelot/kanagawa.nvim")
 	use({ "catppuccin/nvim", as = "catppuccin" })
-  use({ 'Everblush/nvim', as = 'everblush' })
+	use({ "Everblush/nvim", as = "everblush" })
+	use("navarasu/onedark.nvim")
+	use("folke/tokyonight.nvim")
 
 	-- Git
 	use("dinhhuy258/git.nvim")
 	use("lewis6991/gitsigns.nvim")
 
-  --- Github Copilot
+	--- Github Copilot
 	use("github/copilot.vim")
- 
+
 	-- Markdown
 	use({
 		"iamcco/markdown-preview.nvim",
@@ -45,7 +47,6 @@ packer.startup(function(use)
 
 	-- UTILS
 	use("windwp/nvim-autopairs")
-	use("windwp/nvim-ts-autotag")
 	use("numToStr/Comment.nvim")
 	use("JoosepAlviste/nvim-ts-context-commentstring")
 

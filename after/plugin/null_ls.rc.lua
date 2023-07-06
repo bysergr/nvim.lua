@@ -14,11 +14,11 @@ local sources = {
 	formatting.gofumpt,
 	formatting.clang_format,
 	formatting.black,
+	formatting.stylua,
 
-  diagnostics.eslint_d.with({
-    diagnostics_format = '[eslint] #{m}\n(#{c})'
-  })
-
+	diagnostics.eslint_d.with({
+		diagnostics_format = "[eslint] #{m}\n(#{c})",
+	}),
 }
 
 local lsp_formatting = function(bufnr)
