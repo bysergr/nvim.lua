@@ -19,7 +19,6 @@ ts.setup({
 	ensure_installed = {
 		"tsx",
 		"lua",
-		"c",
 		"cpp",
 		"go",
 		"rust",
@@ -29,7 +28,8 @@ ts.setup({
 		"json5",
 		"javascript",
 		"typescript",
-		"ruby",
+		"markdown",
+		"markdown_inline",
 	},
 	autotag = {
 		enable = true,

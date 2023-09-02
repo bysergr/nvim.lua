@@ -10,10 +10,13 @@ local function telescope_buffer_dir()
 	return vim.fn.expand("%:p:h")
 end
 
+local general_theme = "ivy"
+
 local fb_actions = require("telescope").extensions.file_browser.actions
 
 telescope.setup({
 	defaults = {
+		theme = general_theme,
 		file_ignore_patterns = { "node_modules", ".git", ".vscode", "target", "packer_compiled.lua" },
 		defaults = {},
 		mappings = {
@@ -22,9 +25,26 @@ telescope.setup({
 			},
 		},
 	},
+	pickers = {
+		find_files = {
+			theme = general_theme,
+		},
+		live_grep = {
+			theme = general_theme,
+		},
+		buffers = {
+			theme = general_theme,
+		},
+		diagnostics = {
+			theme = general_theme,
+		},
+		help_tags = {
+			theme = general_theme,
+		},
+	},
 	extensions = {
 		file_browser = {
-			theme = "dropdown",
+			theme = general_theme,
 			-- disables netrw and use telescope-file-browser in its place
 			hijack_netrw = true,
 			grouped = true,
@@ -74,6 +94,7 @@ end)
 vim.keymap.set("n", "sf", function()
 	telescope.extensions.file_browser.file_browser({
 		path = "%:p:h",
+		theme = "ivy",
 		cwd = telescope_buffer_dir(),
 		respect_gitignore = false,
 		hidden = true,
