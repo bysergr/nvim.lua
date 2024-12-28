@@ -1,7 +1,1 @@
-### My NVIM Configuration in Lua
-
-- Themes: kanagawa, nightfly, ayu and catppuccin
-- Support LSP
-- Support GIT
-- Formatter 
-- Telescope
+# My NVIM Configuration in Lua

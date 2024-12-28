@@ -1,6 +1,4 @@
 require("mason").setup()
-require("mason-lspconfig").setup({})
-require("mason-null-ls").setup({})
 
 local on_attach = function(_, bufnr)
 	local function buf_set_keymap(...)
@@ -16,7 +14,6 @@ local on_attach = function(_, bufnr)
             augroup formatting
                 autocmd! * <buffer>
                 autocmd BufWritePre <buffer> lua vim.lsp.buf.format()
-                autocmd BufWritePre <buffer> lua OrganizeImports(1000)
             augroup END
         ]])
 
@@ -30,35 +27,29 @@ local on_attach = function(_, bufnr)
         ]])
 end
 
--- organize imports
--- https://github.com/neovim/nvim-lspconfig/issues/115#issuecomment-902680058
-function OrganizeImports(timeoutms)
-	local params = vim.lsp.util.make_range_params()
-	params.context = { only = { "source.organizeImports" } }
-	local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeoutms)
-	for _, res in pairs(result or {}) do
-		for _, r in pairs(res.result or {}) do
-			if r.edit then
-				vim.lsp.util.apply_workspace_edit(r.edit, "UTF-8")
-			else
-				vim.lsp.buf.execute_command(r.command)
-			end
-		end
-	end
-end
-
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
+local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 local lspconfig = require("lspconfig")
 
 lspconfig.tailwindcss.setup({
-	on_attach = on_attach,
 	capabilities = capabilities,
 	root_dir = function(_)
 		return vim.loop.cwd()
 	end,
 })
 
-lspconfig.clojure_lsp.setup({})
+lspconfig.clojure_lsp.setup({
+	capabilities = capabilities,
+})
+
+lspconfig.metals.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+})
+
+lspconfig.phan.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+})
 
 lspconfig.lua_ls.setup({
 	capabilities = capabilities,
@@ -76,6 +67,7 @@ lspconfig.lua_ls.setup({
 lspconfig.elixirls.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
+	cmd = { "/home/bysergr/.config/elixir/language_server.sh" },
 })
 
 lspconfig.pyright.setup({
@@ -83,8 +75,28 @@ lspconfig.pyright.setup({
 	capabilities = capabilities,
 })
 
-lspconfig.tsserver.setup({
-	on_attach = on_attach,
+lspconfig.emmet_language_server.setup({})
+
+lspconfig.ts_ls.setup({
+	init_options = {
+		plugins = {
+			{
+				name = "@vue/typescript-plugin",
+				location = "/home/bysergr/.nvm/versions/node/v20.12.2/lib/node_modules/@vue/language-server",
+				languages = { "javascript", "typescript", "vue" },
+			},
+		},
+	},
+
+	filetypes = {
+		"javascript",
+		"javascriptreact",
+		"javascript.jsx",
+		"typescript",
+		"typescriptreact",
+		"typescript.tsx",
+		"vue",
+	},
 	capabilities = capabilities,
 })
 
@@ -93,6 +105,9 @@ lspconfig.rust_analyzer.setup({
 	capabilities = capabilities,
 	settings = {
 		["rust-analyzer"] = {
+			diagnostics = {
+				enable = false,
+			},
 			checkOnSave = {
 				command = "clippy",
 				extraArg = { "--fix" },
@@ -103,7 +118,7 @@ lspconfig.rust_analyzer.setup({
 
 lspconfig.eslint.setup({
 	capabilities = capabilities,
-	on_attach = function(bufnr, _)
+	on_attach = function(_, bufnr)
 		vim.api.nvim_create_autocmd("BufWritePre", {
 			buffer = bufnr,
 			command = "EslintFixAll",
@@ -111,8 +126,14 @@ lspconfig.eslint.setup({
 	end,
 })
 
-lspconfig.astro.setup({
+lspconfig.volar.setup({})
+
+lspconfig.dartls.setup({
 	on_attach = on_attach,
+	capabilities = capabilities,
+})
+
+lspconfig.astro.setup({
 	capabilities = capabilities,
 })
 
@@ -126,16 +147,35 @@ lspconfig.cssls.setup({
 	capabilities = capabilities,
 })
 
+local function organize_imports(client, bufnr)
+	local params = vim.lsp.util.make_range_params(nil, vim.lsp.util._get_offset_encoding())
+	params.context = { only = { "source.organizeImports" } }
+
+	local resp = client.request_sync("textDocument/codeAction", params, 3000, bufnr)
+	for _, r in pairs(resp and resp.result or {}) do
+		if r.edit then
+			vim.lsp.util.apply_workspace_edit(r.edit, vim.lsp.util._get_offset_encoding())
+		else
+			vim.lsp.buf.execute_command(r.command)
+		end
+	end
+end
+
 lspconfig.gopls.setup({
-	on_attach = on_attach,
+	on_attach = function(client, bufnr)
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			buffer = bufnr,
+			callback = function()
+				organize_imports(client, bufnr)
+				vim.lsp.buf.format({ async = false })
+			end,
+		})
+	end,
 	capabilities = capabilities,
 	settings = {
 		gopls = {
 			gofumpt = true,
 		},
-	},
-	flags = {
-		debounce_text_changes = 150,
 	},
 })
 

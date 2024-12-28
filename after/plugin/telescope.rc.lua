@@ -18,7 +18,6 @@ telescope.setup({
 	defaults = {
 		theme = general_theme,
 		file_ignore_patterns = { "node_modules", ".git", ".vscode", "target", "packer_compiled.lua" },
-		defaults = {},
 		mappings = {
 			n = {
 				["q"] = actions.close,
@@ -74,7 +73,10 @@ telescope.setup({
 telescope.load_extension("file_browser")
 
 vim.keymap.set("n", ";f", function()
-	builtin.find_files(themes)
+	builtin.find_files({
+		no_ignore = false,
+		hidden = true,
+	})
 end)
 vim.keymap.set("n", ";d", function()
 	builtin.live_grep(themes)
