@@ -19,9 +19,8 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-local opts = {
+local lazyOpts = {
 	defaults = {
-		lazy = true,
 		version = false,
 	},
 	checker = {
@@ -153,12 +152,65 @@ local plugins = { -- Themes
 
 			vim.cmd("colorscheme catppuccin")
 		end,
+	}, -- Git
+	{
+		"dinhhuy258/git.nvim",
+		lazy = false,
+		config = function()
+			require("gitsigns").setup()
+		end,
 	},
-	-- Git
-	"dinhhuy258/git.nvim",
-	"lewis6991/gitsigns.nvim",
-
-	-- ui
+	{
+		"lewis6991/gitsigns.nvim",
+		lazy = false,
+		config = function()
+			require("git").setup()
+		end,
+	},
+	{
+		"folke/flash.nvim",
+		event = "VeryLazy",
+		---@type Flash.Config
+		opts = {},
+  -- stylua: ignore
+  keys = { {
+    "s",
+    mode = { "n", "x", "o" },
+    function()
+      require("flash").jump()
+    end,
+    desc = "Flash"
+  }, {
+    "S",
+    mode = { "n", "x", "o" },
+    function()
+      require("flash").treesitter()
+    end,
+    desc = "Flash Treesitter"
+  }, {
+    "r",
+    mode = "o",
+    function()
+      require("flash").remote()
+    end,
+    desc = "Remote Flash"
+  }, {
+    "R",
+    mode = { "o", "x" },
+    function()
+      require("flash").treesitter_search()
+    end,
+    desc = "Treesitter Search"
+  }, {
+    "<c-s>",
+    mode = { "c" },
+    function()
+      require("flash").toggle()
+    end,
+    desc = "Toggle Flash Search"
+  } }
+,
+	}, -- ui
 	"nvim-lualine/lualine.nvim",
 	{
 		"lukas-reineke/indent-blankline.nvim",
@@ -167,8 +219,21 @@ local plugins = { -- Themes
 		---@type ibl.config
 		opts = {},
 	},
-
-	"kyazdani42/nvim-web-devicons",
+	{
+		"kyazdani42/nvim-web-devicons",
+		config = function()
+			require("nvim-web-devicons").setup({
+				-- Add the icon for the astro file type
+				override_by_extension = {
+					["astro"] = {
+						icon = "",
+						color = "#ff7e33",
+						name = "Astro",
+					},
+				},
+			})
+		end,
+	},
 	{
 		"windwp/nvim-ts-autotag",
 		lazy = false,
@@ -181,15 +246,6 @@ local plugins = { -- Themes
 		lazy = false,
 		dependencies = { "windwp/nvim-ts-autotag" },
 		config = function()
-			-- vim.lsp.handlers["textDocument/publishDiagnostics"] =
-			-- 	vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-			-- 		underline = true,
-			-- 		virtual_text = {
-			-- 			spacing = 5,
-			-- 		},
-			-- 		update_in_insert = true,
-			-- 	})
-
 			require("nvim-treesitter.configs").setup({
 				sync_install = true,
 				auto_install = true,
@@ -223,14 +279,31 @@ local plugins = { -- Themes
 				},
 			})
 		end,
-	},
-
-	-- UTILS
+	}, -- UTILS
 	{
 		"github/copilot.vim",
 		lazy = false,
 	},
-	"numToStr/Comment.nvim",
+	{
+		"numToStr/Comment.nvim",
+		config = function()
+			require("Comment").setup({
+				pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+				toggler = {
+					---Line-comment toggle keymap
+					line = ",c",
+					---Block-comment toggle keymap
+					block = ",d",
+				},
+				opleader = {
+					---Line-comment keymap
+					line = ",c",
+					---Block-comment keymap
+					block = ",b",
+				},
+			})
+		end,
+	},
 	{
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
@@ -238,6 +311,7 @@ local plugins = { -- Themes
 	},
 	{
 		"JoosepAlviste/nvim-ts-context-commentstring",
+		lazy = false,
 		event = "BufRead",
 		config = function()
 			require("ts_context_commentstring").setup({
@@ -245,9 +319,17 @@ local plugins = { -- Themes
 			})
 		end,
 	},
-	"nvim-telescope/telescope-file-browser.nvim",
-	"nvim-telescope/telescope.nvim",
-	"nvim-lua/plenary.nvim", -- LSP
+	{
+		"telescope.nvim",
+		dependencies = {
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				build = "make",
+			},
+			"nvim-telescope/telescope-file-browser.nvim",
+			"nvim-lua/plenary.nvim",
+		},
+	}, -- LSP
 	"williamboman/mason.nvim",
 	"neovim/nvim-lspconfig",
 	"jose-elias-alvarez/null-ls.nvim",
@@ -268,4 +350,4 @@ local plugins = { -- Themes
 	},
 }
 
-require("lazy").setup(plugins, opts)
+require("lazy").setup(plugins, lazyOpts)
